@@ -1,0 +1,197 @@
+Programa 1
+CODIGO:
+processor 16f877
+include<p16f877.inc>
+contador equ h'20' ;Asignamos una dirección de memoria a la etiquetas
+valor1 equ h'21'
+valor2 equ h'22'
+valor3 equ h'23'
+cte1 equ 20h ; Registros a recorren para generar el retardo
+cte2 equ 50h
+cte3 equ 60h
+org 0 ;Vector reset
+goto inicio  ;Salta a la etiqueta inicio
+org 5 
+inicio bsf STATUS,5   ;comenzamos la etiqueta inicio
+	BCF STATUS,6 ; Ponemos un cero en el registro 6 de status para cambiar de banco
+	MOVLW H'0' ;Movemos un cero en el acumulador
+	MOVWF TRISB  ;Movemos lo que tiene acumulador al registro Tris
+	BCF STATUS,5 ;Ponemos un cero en el registro 5 de status para regresar el banco
+	clrf PORTB; Limpia el puerto B
+
+loop2 bsf PORTB,0  ;Pone el bit a uno lo guarda en el acumulador
+	call retardo ;Llama a la etiqueta retardo
+	bcf PORTB,0 ; Pone cero lo guarda en acumulador
+	call retardo  ; Llama a la etiqueta retardo
+	goto loop2  ;Salta a la etiqueta loop2
+retardo movlw cte1  ; Empieza la etiqueta retardo
+tres movlw cte2   ; mueve la contante al acumulador
+	movwf valor2; Mueve lo que tiene el acumulador a valor 2
+dos movlw cte3  ; mueve la contante al acumulador
+
+	movwf valor3
+uno decfsz valor3  ; decrementa el valor de valor 3 salta cuando valor3=0
+	goto uno ;salta a la etiqueta 1
+	decfsz valor2 ; decrementa el valor de valor 2 salta cuando valor2=0
+	goto dos ;salta a la etiqueta2
+	decfsz valor1 ;decrementa el valor de valor 1 salta cuando valor1=0
+	goto tres ; salta a la etiqueta 3
+	return ;Intruccion para que vuelva al programa
+END ;Termina el programa
+
+Programa 2
+CODIGO:
+processor 16f877
+include<p16f877.inc>
+contador equ h'20' ;Asignamos una dirección de memoria a la etiquetas
+valor1 equ h'21'
+valor2 equ h'22'
+valor3 equ h'23'
+cte1 equ 20h ; Registros a recorren para generar el retardo
+cte2 equ 50h
+cte3 equ 60h
+org 0 ;Vector reset
+goto inicio  ;Salta a la etiqueta inicio
+org 5 
+inicio bsf STATUS,5   ;comenzamos la etiqueta inicio
+	BCF STATUS,6 ; Ponemos un cero en el registro 6 de status para cambiar de banco
+	MOVLW H'0' ;Movemos un cero en el acumulador
+	MOVWF TRISB  ;Movemos lo que tiene acumulador al registro Tris
+	BCF STATUS,5 ;Ponemos un cero en el registro 5 de status para regresar el banco
+	clrf PORTB; Limpia el puerto B
+
+loop2 
+	movlw b'11111111' ; Se pone un uno en el acumulador
+ 	movwf PORTB
+	call retardo ;Llama a la etiqueta retardo
+	bcf PORTB,0 ; Pone cero lo guarda en acumulador
+	call retardo  ; Llama a la etiqueta retardo
+	goto loop2  ;Salta a la etiqueta loop2
+retardo movlw cte1  ; Empieza la etiqueta retardo
+tres movlw cte2   ; mueve la contante al acumulador
+	movwf valor2; Mueve lo que tiene el acumulador a valor 2
+dos movlw cte3  ; mueve la contante al acumulador
+
+	movwf valor3
+uno decfsz valor3  ; decrementa el valor de valor 3 salta cuando valor3=0
+	goto uno ;salta a la etiqueta 1
+	decfsz valor2 ; decrementa el valor de valor 2 salta cuando valor2=0
+	goto dos ;salta a la etiqueta2
+	decfsz valor1 ;decrementa el valor de valor 1 salta cuando valor1=0
+	goto tres ; salta a la etiqueta 3
+	return ;Intruccion para que vuelva al programa
+END ;Termina el programa
+
+
+
+
+
+
+
+
+
+
+Programa 3
+CODIGO:
+processor 16f877
+include<p16f877.inc>
+K equ H'26' ;Asignamos espacio de memoria para la variable K
+
+J equ H'27' ;Asignamos espacio de memoria para la variable J
+valor1 equ h'21'
+valor2 equ h'22'
+valor3 equ h'23'
+cte1 equ 20h ; Registros a recorren para generar el retardo
+cte2 equ 50h
+cte3 equ 60h
+org 0 ;Vector reset
+goto inicio  ;Salta a la etiqueta inicio
+org 5 
+inicio bsf STATUS,5   ;comenzamos la etiqueta inicio
+	BCF STATUS,6 ; Ponemos un cero en el registro 6 de status para cambiar de banco
+	MOVLW H'0' ;Movemos un cero en el acumulador
+	MOVWF TRISB  ;Movemos lo que tiene acumulador al registro Tris
+	BCF STATUS,5 ;Ponemos un cero en el registro 5 de status para regresar el banco
+	clrf PORTB; Limpia el puerto B
+
+ciclo: 
+
+movlw h'80' ;movemos un 1 a w
+
+movwf PORTB ; movemos lo que hay en w a K
+
+call retardo
+
+movlw h'07' ;movemos un 7 a w
+
+movwf J ;cmovemos lo que hay en w a J
+
+
+
+corrimiento:
+
+rrf PORTB,1 ;Corrimiento a la derecha de uno en uno
+
+decf J,1 ; Decrementa J en 1 este es el contador
+
+call retardo
+
+btfss STATUS,Z ;Salta si Z=1 esto implica que hubo un cero en J
+
+goto corrimiento ; Salta a subrutina corrimiento
+
+goto ciclo ;Saltamos a ciclo
+retardo movlw cte1  ; Empieza la etiqueta retardo
+tres movlw cte2   ; mueve la contante al acumulador
+	movwf valor2; Mueve lo que tiene el acumulador a valor 2
+dos movlw cte3  ; mueve la contante al acumulador
+
+	movwf valor3
+uno decfsz valor3  ; decrementa el valor de valor 3 salta cuando valor3=0
+	goto uno ;salta a la etiqueta 1
+	decfsz valor2 ; decrementa el valor de valor 2 salta cuando valor2=0
+	goto dos ;salta a la etiqueta2
+	decfsz valor1 ;decrementa el valor de valor 1 salta cuando valor1=0
+	goto tres ; salta a la etiqueta 3
+	return ;Intruccion para que vuelva al programa
+END ;Termina el programa
+
+Programa 4
+CODIGO:
+processor 16f877
+include<p16f877.inc>
+K equ H'26' ;Asignamos espacio de memoria para la variable K
+
+J equ H'27' ;Asignamos espacio de memoria para la variable J
+valor1 equ h'21'
+valor2 equ h'22'
+valor3 equ h'23'
+cte1 equ 20h ; Registros a recorren para generar el retardo
+cte2 equ 50h
+cte3 equ 60h
+org 0 ;Vector reset
+goto inicio  ;Salta a la etiqueta inicio
+org 5 
+inicio bsf STATUS,5   ;comenzamos la etiqueta inicio
+	BCF STATUS,6 ; Ponemos un cero en el registro 6 de status para cambiar de banco
+	MOVLW H'0' ;Movemos un cero en el acumulador
+	MOVWF TRISB  ;Movemos lo que tiene acumulador al registro Tris
+	BCF STATUS,5 ;Ponemos un cero en el registro 5 de status para regresar el banco
+	clrf PORTB; Limpia el puerto B
+ciclo:
+	incf PORTB,1
+	call retardo 
+retardo movlw cte1  ; Empieza la etiqueta retardo
+tres movlw cte2   ; mueve la contante al acumulador
+	movwf valor2; Mueve lo que tiene el acumulador a valor 2
+dos movlw cte3  ; mueve la contante al acumulador
+
+	movwf valor3
+uno decfsz valor3  ; decrementa el valor de valor 3 salta cuando valor3=0
+	goto uno ;salta a la etiqueta 1
+	decfsz valor2 ; decrementa el valor de valor 2 salta cuando valor2=0
+	goto dos ;salta a la etiqueta2
+	decfsz valor1 ;decrementa el valor de valor 1 salta cuando valor1=0
+	goto tres ; salta a la etiqueta 3
+	return ;Intruccion para que vuelva al programa
+END ;Termina el programa
